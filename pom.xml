@@ -72,38 +72,7 @@
     <module>native-io</module>
     <module>testtools</module>
   </modules>
-  <mailingLists>
-    <mailingList>
-      <name>BookKeeper User</name>
-      <subscribe>user-subscribe@bookkeeper.apache.org</subscribe>
-      <unsubscribe>user-unsubscribe@bookkeeper.apache.org</unsubscribe>
-      <post>user@bookkeeper.apache.org</post>
-      <archive>https://www.mail-archive.com/user@bookkeeper.apache.org</archive>
-    </mailingList>
-    <mailingList>
-      <name>BookKeeper Dev</name>
-      <subscribe>dev-subscribe@bookkeeper.apache.org</subscribe>
-      <unsubscribe>dev-unsubscribe@bookkeeper.apache.org</unsubscribe>
-      <post>dev@bookkeeper.apache.org</post>
-      <archive>https://www.mail-archive.com/dev@bookkeeper.apache.org</archive>
-    </mailingList>
-    <mailingList>
-      <name>BookKeeper Commits</name>
-      <subscribe>commits-subscribe@bookkeeper.apache.org</subscribe>
-      <unsubscribe>commits-unsubscribe@bookkeeper.apache.org</unsubscribe>
-      <post>commits@bookkeeper.apache.org</post>
-      <archive>https://www.mail-archive.com/commits@bookkeeper.apache.org</archive>
-    </mailingList>
-  </mailingLists>
-  <developers>
-    <developer>
-      <name>The Apache BookKeeper Team</name>
-      <email>dev@bookkeeper.apache.org</email>
-      <url>https://bookkeeper.apache.org</url>
-      <organization>Apache Software Foundation</organization>
-      <organizationUrl>https://www.apache.org</organizationUrl>
-    </developer>
-  </developers>
+
   <properties>
     <maven.compiler.source>8</maven.compiler.source>
     <maven.compiler.target>8</maven.compiler.target>
@@ -177,6 +146,7 @@
     <snappy.version>1.1.10.5</snappy.version>
     <jctools.version>2.1.2</jctools.version>
     <hppc.version>0.9.1</hppc.version>
+
     <!-- plugin dependencies -->
     <apache-rat-plugin.version>0.16.1</apache-rat-plugin.version>
     <cobertura-maven-plugin.version>2.7</cobertura-maven-plugin.version>
@@ -1215,7 +1185,7 @@
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-surefire-plugin</artifactId>
             <configuration>
-              <argLine>-Xmx2G -Djava.net.preferIPv4Stack=true -Dio.netty.leakDetection.level=paranoid -Dbookkeeper.log.root.level=INFO -Dbookkeeper.log.root.appender=CONSOLE</argLine>
+              <!--<argLine>-Xmx2G -Djava.net.preferIPv4Stack=true -Dio.netty.leakDetection.level=paranoid -Dbookkeeper.log.root.level=INFO -Dbookkeeper.log.root.appender=CONSOLE</argLine>-->
               <redirectTestOutputToFile>false</redirectTestOutputToFile>
               <forkCount>${forkCount.variable}</forkCount>
               <reuseForks>false</reuseForks>
