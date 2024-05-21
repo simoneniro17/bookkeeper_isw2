@@ -237,12 +237,14 @@
       <artifactId>awaitility</artifactId>
       <scope>test</scope>
     </dependency>
-      <dependency>
-          <groupId>org.testng</groupId>
-          <artifactId>testng</artifactId>
-          <version>7.5</version>
-          <scope>test</scope>
-      </dependency>
+
+    <!-- ISW2 - Pitest -->
+    <dependency>
+      <groupId>org.pitest</groupId>
+      <artifactId>pitest-maven</artifactId>
+      <version>1.16.1</version>
+    </dependency>
+
   </dependencies>
   <build>
     <plugins>
@@ -325,6 +327,22 @@
           </execution>
         </executions>
       </plugin>
+
+      <!-- ISW2 - Pitest -->
+      <plugin>
+        <groupId>org.pitest</groupId>
+        <artifactId>pitest-maven</artifactId>
+        <version>1.16.1</version>
+        <configuration>
+          <targetClasses>
+            <param>org.apache.bookkeeper.Calculator</param>
+          </targetClasses>
+          <targetTests>
+            <param>org.apache.bookkeeper.CalculatorTest</param>
+          </targetTests>
+        </configuration>
+      </plugin>
+
     </plugins>
   </build>
   <profiles>
