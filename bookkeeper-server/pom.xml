@@ -335,10 +335,10 @@
         <version>1.16.1</version>
         <configuration>
           <targetClasses>
-            <param>org.apache.bookkeeper.Calculator</param>
+            <param>org.apache.bookkeeper.my.Calculator</param>
           </targetClasses>
           <targetTests>
-            <param>org.apache.bookkeeper.CalculatorTest</param>
+            <param>org.apache.bookkeeper.my.CalculatorTest</param>
           </targetTests>
         </configuration>
       </plugin>
@@ -509,12 +509,24 @@
                     <argument>-input</argument>
                     <argument>${project.build.directory}/coverage.ser</argument>
                     <argument>-classes</argument>
-                    <argument>target/classes</argument>
+                    <argument>target/classes/org/apache/bookkeeper/my</argument>
                     <argument>-show-classes</argument>
                     <argument>-show-methods</argument>
                     <argument>-xml</argument>
                     <argument>${project.build.directory}/badua.xml</argument>
                   </arguments>
+                </configuration>
+              </execution>
+
+              <!-- Prettify Badua report -->
+              <execution>
+                <id>Prettify Badua Report</id>
+                <phase>test</phase>
+                <goals>
+                  <goal>exec</goal>
+                </goals>
+                <configuration>
+                  <executable>${basedir}/ba-dua/prettify.sh</executable>
                 </configuration>
               </execution>
             </executions>
