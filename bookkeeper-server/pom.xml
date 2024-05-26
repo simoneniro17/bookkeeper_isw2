@@ -238,13 +238,6 @@
       <scope>test</scope>
     </dependency>
 
-    <!-- ISW2 - Pitest -->
-    <dependency>
-      <groupId>org.pitest</groupId>
-      <artifactId>pitest-maven</artifactId>
-      <version>1.16.1</version>
-    </dependency>
-
   </dependencies>
   <build>
     <plugins>
@@ -327,24 +320,9 @@
           </execution>
         </executions>
       </plugin>
-
-      <!-- ISW2 - Pitest -->
-      <plugin>
-        <groupId>org.pitest</groupId>
-        <artifactId>pitest-maven</artifactId>
-        <version>1.16.1</version>
-        <configuration>
-          <targetClasses>
-            <param>org.apache.bookkeeper.my.Calculator</param>
-          </targetClasses>
-          <targetTests>
-            <param>org.apache.bookkeeper.my.CalculatorTest</param>
-          </targetTests>
-        </configuration>
-      </plugin>
-
     </plugins>
   </build>
+
   <profiles>
     <profile>
       <id>vertx-http-server</id>
@@ -439,6 +417,38 @@
         </plugins>
       </build>
     </profile>
+
+    <!-- ISW2 - PIT profile -->
+    <profile>
+      <id>pitest</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.pitest</groupId>
+            <artifactId>pitest-maven</artifactId>
+            <version>1.16.1</version>
+            <executions>
+              <execution>
+                <id>run-pitest</id>
+                <phase>test</phase>
+                <goals>
+                  <goal>mutationCoverage</goal>
+                </goals>
+                <configuration>
+                  <targetClasses>
+                    <param>org.apache.bookkeeper.my.Calculator</param>
+                  </targetClasses>
+                  <targetTests>
+                    <param>org.apache.bookkeeper.my.CalculatorTest</param>
+                  </targetTests>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
 
     <!-- ISW2 - Ba-dua profile -->
     <profile>
