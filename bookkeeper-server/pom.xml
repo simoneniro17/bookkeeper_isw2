@@ -437,9 +437,11 @@
                 <configuration>
                   <targetClasses>
                     <param>org.apache.bookkeeper.my.Calculator</param>
+                    <param>org.apache.bookkeeper.bookie.storage.ldb.ReadCache</param>
                   </targetClasses>
                   <targetTests>
                     <param>org.apache.bookkeeper.my.CalculatorTest</param>
+                    <param>org.apache.bookkeeper.bookie.storage.ldb.ReadCacheTest</param>
                   </targetTests>
                 </configuration>
               </execution>
