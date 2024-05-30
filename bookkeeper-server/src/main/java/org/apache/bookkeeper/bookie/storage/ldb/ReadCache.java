@@ -55,6 +55,7 @@ public class ReadCache implements Closeable {
     private final List<ConcurrentLongLongPairHashMap> cacheIndexes;
 
     private int currentSegmentIdx;
+    //autoincrementa l'integer
     private final AtomicInteger currentSegmentOffset = new AtomicInteger(0);
 
     private final int segmentSize;
@@ -62,6 +63,7 @@ public class ReadCache implements Closeable {
     private ByteBufAllocator allocator;
     private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
 
+    // costruttore chiamato se non specificata la massima dimensione del segmento
     public ReadCache(ByteBufAllocator allocator, long maxCacheSize) {
         this(allocator, maxCacheSize, DEFAULT_MAX_SEGMENT_SIZE);
     }

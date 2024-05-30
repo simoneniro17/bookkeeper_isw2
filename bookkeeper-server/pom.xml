@@ -441,7 +441,8 @@
                   </targetClasses>
                   <targetTests>
                     <param>org.apache.bookkeeper.my.CalculatorTest</param>
-                    <param>org.apache.bookkeeper.bookie.storage.ldb.ReadCacheTest</param>
+                    <param>org.apache.bookkeeper.bookie.storage.ldb.ReadCacheGetTest</param>
+                    <param>org.apache.bookkeeper.bookie.storage.ldb.ReadCacheHasEntryTest</param>
                   </targetTests>
                 </configuration>
               </execution>
