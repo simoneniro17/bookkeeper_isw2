@@ -14,16 +14,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Set up JDK 17
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Build
+      - name: Verify
+        run: mvn verify
+
+      - name: Build and test
         run: mvn clean test -P jacoco
 
       - name: Upload report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: jacoco-report
           path: bookkeeper-server/target/site/jacoco
