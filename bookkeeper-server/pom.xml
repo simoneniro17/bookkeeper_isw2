@@ -327,10 +327,11 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.8.1</version>
         <configuration>
-          <includes>
+          <!-- <includes>
+            <include>org/apache/bookkeeper/bookie/Journal.java</include>
             <include>org/apache/bookkeeper/my/</include>
             <include>org/apache/bookkeeper/bookie/storage/ldb/ReadCache.java</include>
-          </includes>
+          </includes> -->
         </configuration>
       </plugin>
     </plugins>
