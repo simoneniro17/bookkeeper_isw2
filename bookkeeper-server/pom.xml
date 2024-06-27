@@ -450,14 +450,17 @@
                 </goals>
                 <configuration>
                   <targetClasses>
-                    <param>org.apache.bookkeeper.my.Calculator</param>
-                    <param>org.apache.bookkeeper.bookie.storage.ldb.ReadCache</param>
+                    <!-- <param>org.apache.bookkeeper.my.Calculator</param>
+                    <param>org.apache.bookkeeper.bookie.storage.ldb.ReadCache</param> -->
+                    <param>org.apache.bookkeeper.bookie.Journal</param>
                   </targetClasses>
                   <targetTests>
+                    <!--
                     <param>org.apache.bookkeeper.my.CalculatorTest</param>
                     <param>org.apache.bookkeeper.bookie.storage.ldb.ReadCachePutTest</param>
                     <param>org.apache.bookkeeper.bookie.storage.ldb.ReadCacheGetTest</param>
-                    <param>org.apache.bookkeeper.bookie.storage.ldb.ReadCacheHasEntryTest</param>
+                    <param>org.apache.bookkeeper.bookie.storage.ldb.ReadCacheHasEntryTest</param> -->
+                    <param>org.apache.bookkeeper.bookie.JournalTest</param>
                   </targetTests>
                 </configuration>
               </execution>
@@ -537,8 +540,7 @@
                     <argument>-input</argument>
                     <argument>${project.build.directory}/coverage.ser</argument>
                     <argument>-classes</argument>
-                    <!-- <argument>target/classes/org/apache/bookkeeper/my</argument> -->
-                    <argument>target/classes/org/apache/bookkeeper/bookie/storage/ldb</argument>
+                    <argument>target/classes/org/apache/bookkeeper/bookie</argument>
                     <argument>-show-classes</argument>
                     <argument>-show-methods</argument>
                     <argument>-xml</argument>
