@@ -19,8 +19,8 @@ public class JournalTest {
     
     private File journalDir;
     private Journal.JournalIdFilter journalIdFilter;
-    private List<Long> expectedOutput;
-    private expectExceptionType expectException;
+    private final List<Long> expectedOutput;
+    private final expectExceptionType expectException;
     
     public JournalTest(File journalDir, Journal.JournalIdFilter journalIdFilter, List<Long> expectedOutput, expectExceptionType expectException) {
         this.journalDir = journalDir;
@@ -111,8 +111,11 @@ public class JournalTest {
                 {JournalDirType.NO_LOG_FILES_DIR.getJournalDir(), JournalIdFilterType.PIPPO_FILTER.getJournalIdFilter(), new ArrayList<Long>(), expectExceptionType.NO},
                 {JournalDirType.ONE_LOG_FILE_DIR.getJournalDir(), JournalIdFilterType.JOURNAL_ROLLING_FILTER.getJournalIdFilter(), new ArrayList<>(Collections.singletonList(7L)), expectExceptionType.NO},
                 
+                // Dopo Jacoco
                 {JournalDirType.ONE_LOG_FILE_DIR.getJournalDir(), null, new ArrayList<>(Collections.singletonList(7L)), expectExceptionType.NO},
                 {JournalDirType.ONE_LOG_FILE_DIR.getJournalDir(), JournalIdFilterType.PIPPO_FILTER.getJournalIdFilter(), new ArrayList<Long>(), expectExceptionType.NO},
+                
+                // Dopo PIT
                 {JournalDirType.TWO_LOG_FILES_DIR.getJournalDir(), null, new ArrayList<>(Arrays.asList(1L, 2L)), expectExceptionType.NO}
         });
     }
