@@ -3,35 +3,35 @@ package org.apache.bookkeeper.bookie;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
+import org.mockito.Mockito;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 import java.util.Arrays;
 import java.util.Collection;
 
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.doReturn;
 
 @RunWith(value = Parameterized.class)
 public class FileInfoTest {
+    
     private FileInfo fileInfo;
+    private File currentFile;
+    private File newLocationFile;
     
     private File newFile;
     private long size;
     private expectedOutputType expectedOutput;
     private expectExceptionType expectException;
     
-    private File currentFile;
     private byte[] masterKey;
     private int fileInfoVersion;
-    
-    private File newLocationFile;
     
     private static final String USER_DIR = System.getProperty("user.dir");
     private static final String CURRENT_FILE_PATH = "src/test/resources/fileinfo/current_file.txt";
@@ -49,7 +49,9 @@ public class FileInfoTest {
     
     private enum newFileType {
         NOT_EXISTING_FILE,
-        EXISTING_FILE;
+        EXISTING_FILE,
+        SAME_FILE,
+        NON_CREATABLE_FILE;
         
         public File getNewFileType() {
             switch (this) {
@@ -57,6 +59,8 @@ public class FileInfoTest {
                     return null;
                 case EXISTING_FILE:
                     return new File(USER_DIR, "src/test/resources/fileinfo/new_location_file.txt");
+                case SAME_FILE:
+                    return new File(USER_DIR, CURRENT_FILE_PATH);
                 default:
                     return null;
             }
@@ -142,23 +146,34 @@ public class FileInfoTest {
                 {newFileType.EXISTING_FILE.getNewFileType(), sizeType.LONG_MAX_VALUE.getSizeType(), expectedOutputType.ALL_CONTENT_COPIED, expectExceptionType.NO},
                 {newFileType.EXISTING_FILE.getNewFileType(), sizeType.OVER_CURRENT_FILE_SIZE.getSizeType(), expectedOutputType.ALL_CONTENT_COPIED, expectExceptionType.NO},
                 {newFileType.EXISTING_FILE.getNewFileType(), sizeType.UNDER_CURRENT_FILE_SIZE.getSizeType(), expectedOutputType.PARTIAL_CONTENT_COPIED, expectExceptionType.NO},
-                {newFileType.EXISTING_FILE.getNewFileType(), sizeType.NEGATIVE_SIZE.getSizeType(), expectedOutputType.NO_CONTENT_COPIED, expectExceptionType.NO}
+                {newFileType.EXISTING_FILE.getNewFileType(), sizeType.NEGATIVE_SIZE.getSizeType(), expectedOutputType.NO_CONTENT_COPIED, expectExceptionType.NO},
+                
+                // Dopo Jacoco
+                {newFileType.SAME_FILE.getNewFileType(), sizeType.ZERO_SIZE.getSizeType(), expectedOutputType.NO_CONTENT_COPIED, expectExceptionType.NO},
         });
     }
     
     @Test
     public void moveToNewLocationTest() throws IOException {
+        
         if (expectException == expectExceptionType.YES) {
             assertThrows(Exception.class, () -> fileInfo.moveToNewLocation(newFile, size));
         } else {
             fileInfo.moveToNewLocation(newFile, size);
             
-            assertFalse(currentFile.exists());
-            assertTrue(newFile.exists());
+            if (newFile.equals(currentFile)) {
+                assertTrue(currentFile.exists());
+                assertTrue(newFile.exists());
+                
+                newLocationFile = currentFile;
+            } else {
+                assertFalse(currentFile.exists());
+                assertTrue(newFile.exists());
+            }
             
             NEW_FILE_SIZE = newFile.length();
             
-            switch(expectedOutput) {
+            switch (expectedOutput) {
                 case NO_CONTENT_COPIED:
                     assertEquals(NEW_FILE_SIZE, newLocationFile.length());
                     break;
@@ -170,5 +185,49 @@ public class FileInfoTest {
                     break;
             }
         }
+    }
+    
+    // Dopo Jacoco
+    @Test
+    public void testNullFcOrSameFile() throws Exception {
+        Field fcField = FileInfo.class.getDeclaredField("fc");
+        fcField.setAccessible(true);
+        fcField.set(fileInfo, null);
+        
+        fileInfo.moveToNewLocation(currentFile, 0);
+    }
+    
+    // Dopo Jacoco
+    @Test
+    public void testRlocFileDoesNotExist() throws IOException {
+        if (newLocationFile.exists())
+            newLocationFile.delete();
+        
+        fileInfo.moveToNewLocation(newLocationFile, 0);
+        assertTrue(newLocationFile.exists());
+    }
+    
+    // Dopo Jacoco
+    @Test
+    public void testTransferToFailure() throws Exception {
+        FileChannel mockFc = Mockito.mock(FileChannel.class);
+        Mockito.when(mockFc.size()).thenReturn(1024L);
+        Mockito.when(mockFc.transferTo(Mockito.anyLong(), Mockito.anyLong(), Mockito.any(FileChannel.class)))
+                .thenReturn(0L);
+        
+        Field fcField = FileInfo.class.getDeclaredField("fc");
+        fcField.setAccessible(true);
+        fcField.set(fileInfo, mockFc);
+        
+        assertThrows(IOException.class, () -> fileInfo.moveToNewLocation(newLocationFile, 1024L));
+    }
+    
+    // Dopo Jacoco
+    @Test
+    public void testDeleteFailure() throws Exception {
+        FileInfo spyFileInfo = Mockito.spy(fileInfo);
+        Mockito.doReturn(false).when(spyFileInfo).delete();
+        
+        assertThrows(IOException.class, () -> spyFileInfo.moveToNewLocation(newLocationFile, 0));
     }
 }
